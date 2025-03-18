@@ -1,0 +1,33 @@
+{% extends "base.html.jinja" %}
+{% block content %}
+<div>
+	{% if go_back_link is not none %}
+	<li>
+		<a href="{{ url_for('serve_tree_view', path=go_back_link) }}">..</a>
+	</li>
+	{% endif %}
+	<ul>
+		{% for dir in directories %}
+		<li>
+			<a href="{{ url_for('serve_tree_view', path=dir.relpath) }}">
+				{{ dir.name }}
+			</a>
+		</li>
+		{% endfor %}
+		{% for pdf_file in pdfs %}
+		<li>
+			<a href="{{ url_for('serve_tree_view', path=pdf_file.relpath) }}">
+				{{ pdf_file.name }}
+			</a>
+		</li>
+		{% endfor %}
+		{% for file in others %}
+		<li>
+			<a href="{{ url_for('serve_tree_view', path=file.relpath) }}">
+				{{ file.name }}
+			</a>
+		</li>
+		{% endfor %}
+	</ul>
+</div>
+{% endblock %}

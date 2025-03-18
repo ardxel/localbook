@@ -1,0 +1,4 @@
+﻿{% extends "base.html.jinja" %}
+{% block content %}
+<iframe src="{{ url_for('static', path=pdf_path) }}"></iframe>
+{% endblock %}

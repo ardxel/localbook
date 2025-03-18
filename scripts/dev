@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+module="main"
+attr="app"
+port="3102"
+host="0.0.0.0"
+
+uv run uvicorn "$module:$attr" \
+	--reload \
+	--host "$host" \
+	--port "$port" \
+	--reload \
+	--reload-dir "localbook" \
+	--reload-dir "static" \
+	--reload-dir "templates" \
+	--log-level "debug"

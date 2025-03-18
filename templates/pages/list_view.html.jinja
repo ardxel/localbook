@@ -1,0 +1,12 @@
+{% extends "base.html.jinja" %}
+{% block content %}
+<ul>
+	{% for pdf in pdfs %}
+	<li>
+		<a href="{{ url_for('serve_pdf', path=pdf.relpath) }}">
+			{{ pdf.name }}
+		</a>
+	</li>
+	{% endfor %}
+</ul>
+{% endblock %}

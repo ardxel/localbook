@@ -1,0 +1,19 @@
+[server]
+port = 3102
+host = 'localhost'
+debug = true
+mode = "development"
+
+[system]
+user_data_location ="/home/ardxel/books"
+extend_data = false
+dfs_max_depth = 999
+
+
+
+
+
+
+
+
+
