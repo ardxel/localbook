@@ -8,16 +8,19 @@ node_modules/
 
 *.pyc
 __pycache__/
+.pytest_cache/
 
 instance/
 
-.pytest_cache/
 .coverage
 htmlcov/
 
 dist/
 build/
 bundle/
+static/books/
 static/books
+static/modules/*
+static/images/pdf/
 
 
