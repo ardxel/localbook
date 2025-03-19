@@ -16,7 +16,7 @@
 		{% endfor %}
 		{% for pdf_file in pdfs %}
 		<li>
-			<a href="{{ url_for('serve_tree_view', path=pdf_file.relpath) }}">
+			<a href="{{ url_for('serve_pdf', path=pdf_file.relpath) }}">
 				{{ pdf_file.name }}
 			</a>
 		</li>
