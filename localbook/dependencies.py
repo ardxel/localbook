@@ -12,8 +12,8 @@ import sys
 from fastapi.templating import Jinja2Templates
 
 from localbook.config import Settings
-from localbook.core.decorators import singleton
-from localbook.core.filesystem.tree import FSTree
+from localbook.lib.decorators import singleton
+from localbook.lib.filesystem.tree import FSTree
 
 
 @singleton

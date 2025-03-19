@@ -18,7 +18,7 @@ from pydantic_settings import (
     TomlConfigSettingsSource,
 )
 
-from localbook.core.decorators import singleton
+from localbook.lib.decorators import singleton
 
 
 class ServerSettings(BaseModel):

@@ -7,13 +7,10 @@
 # ================================================================
 
 
-
-
-
 from fastapi import HTTPException, status, templating
 from fastapi.responses import JSONResponse
 
-from localbook.core.filesystem.nodes import FSFile, FSNode, is_fsfile
+from localbook.lib.filesystem.nodes import FSFile, FSNode, is_fsfile
 
 
 class UnsupportedMediaTypeException(HTTPException):
