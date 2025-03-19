@@ -2,7 +2,7 @@
 
 module="main"
 attr="app"
-port="3102"
+port="$(cat config.toml | grep ^port | sed "s/^port\s\?=\?\(\w*\)/\1/")"
 host="0.0.0.0"
 
 uv run uvicorn "$module:$attr" \
@@ -13,4 +13,9 @@ uv run uvicorn "$module:$attr" \
 	--reload-dir "localbook" \
 	--reload-dir "static" \
 	--reload-dir "templates" \
+	--reload-include "*.jinja" \
+	--reload-include "*.py" \
+	--reload-include "*.js" \
+	--reload-include "*.mjs" \
+	--reload-include "*.css" \
 	--log-level "debug"
