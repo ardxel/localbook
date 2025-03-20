@@ -86,13 +86,13 @@ async def serve_pdf(request: Request, path: str):
         # TODO: implement better error handling in this block
         raise UnsupportedMediaTypeException(pdf_node)
 
-    pdfjs_module = "static/modules/pdfjs"
+    pdfjs_module = "static/packages/pdfjs"
     if not os.path.exists(pdfjs_module):
         logger.error("pdfjs module is not exists. Update dependencies by script")
 
     pdf_file = request.url_for("static", path=os.path.join("books", path))
-    pdf_worker = request.url_for("static", path="modules/pdfjs/build/pdf.worker.mjs")
-    pdf_sandbox = request.url_for("static", path="modules/pdfjs/build/pdf.sandbox.mjs")
+    pdf_worker = request.url_for("static", path="packages/pdfjs/build/pdf.worker.mjs")
+    pdf_sandbox = request.url_for("static", path="packages/pdfjs/build/pdf.sandbox.mjs")
     return tmpl.TemplateResponse(
         request=request,
         name=tmplmap.pages.pdfviewer,

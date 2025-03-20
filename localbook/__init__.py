@@ -77,5 +77,5 @@ class LocalBook:
         if not os.path.exists("static/books/jpeg"):
             logger.warning("PDF images is not generated. Plese use special script")
 
-        if not os.path.exists("static/modules/pdfjs"):
+        if not os.path.exists("static/packages/pdfjs"):
             logger.warning("pdfjs module is not exists. Please use special script")

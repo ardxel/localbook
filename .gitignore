@@ -20,7 +20,7 @@ build/
 bundle/
 static/books/
 static/books
-static/modules/*
+static/packages/*
 static/images/pdf/
 
 

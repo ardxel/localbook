@@ -7,10 +7,11 @@
 	var PDF_SANDBOX = "{{pdf_sandbox}}"
 	// document.body.setAttribute("tabindex", "0")
 </script>
-<link rel="resource" type="application/l10n" href="{{ url_for('static', path='modules/pdfjs/web/locale/locale.json')}}">
-<script src="{{ url_for('static', path='modules/pdfjs/build/pdf.mjs' ) }}" type="module"></script>
-<link rel="stylesheet" href="{{  url_for('static', path='modules/pdfjs/web/viewer.css')  }}">
-<script src="{{ url_for('static', path='modules/pdfjs/web/viewer.mjs') }}" type="module"></script>
+<link rel="resource" type="application/l10n"
+	href="{{ url_for('static', path='packages/pdfjs/web/locale/locale.json')}}">
+<script src="{{ url_for('static', path='packages/pdfjs/build/pdf.mjs' ) }}" type="module"></script>
+<link rel="stylesheet" href="{{  url_for('static', path='packages/pdfjs/web/viewer.css')  }}">
+<script src="{{ url_for('static', path='packages/pdfjs/web/viewer.mjs') }}" type="module"></script>
 <script src="{{ url_for('static', path='js/pdfjs-override-run.js') }}" type="module"></script>
 {% endblock %}
 {% block content %}

@@ -18,7 +18,7 @@ with open(os.path.join(ROOT, ".pdfjs-version"), "r") as version_file:
 
 zip_file = f"pdfjs-{version}-dist.zip"
 url = f"https://github.com/mozilla/pdf.js/releases/download/v{version}/{zip_file}"
-save_to = os.path.join(ROOT, "static/modules/pdfjs")
+save_to = os.path.join(ROOT, "static/packages/pdfjs")
 
 
 def main() -> None:
