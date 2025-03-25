@@ -1,12 +1,24 @@
+{% from "components/entries/pdf_entry.jinja" import pdf_entry with context %}
 {% extends "base.html.jinja" %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', path='css/pages/list-view.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', path='css/components/entries/card.css') }}">
+{% endblock %}
+{% block title %}
+All Files
+{% endblock %}
 {% block content %}
-<ul>
-	{% for pdf in pdfs %}
-	<li>
-		<a href="{{ url_for('serve_pdf', path=pdf.relpath) }}">
-			{{ pdf.name }}
-		</a>
-	</li>
-	{% endfor %}
-</ul>
+<main>
+	<div class="list-view">
+		<h1 class="list-view-title">
+			{{ view_title or "All pdfs" }}
+		</h1>
+		<ul class="list-view-entries">
+			{% for pdf_file in pdf_files %}
+			{{ pdf_entry(pdf_file, view = 'card') }}
+			{% endfor %}
+		</ul>
+	</div>
+</main>
 {% endblock %}

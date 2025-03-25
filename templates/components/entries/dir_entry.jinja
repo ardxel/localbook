@@ -1,0 +1,22 @@
+{# DIR CARD #}
+{% macro dir_entry(dir, view = 'row', is_parent = false) %}
+
+{% if view == 'row' %}
+
+<li class="entry-row">
+	<a class="entry-row-anchor" href="{{ url_for('serve_tree_view', path=dir.relpath) }}">
+		<div class="entry-row-icon-box folder-icon">
+			{% include "icons/folder-outline.svg" %}
+		</div>
+		<div class="entry-row-text">
+			<h4 class="entry-row-text-name">{{ dir.name if is_parent is false else ".." }}</h4>
+			<p class="entry-row-text-desc">3/8/22 - 1.2 MB</p>
+		</div>
+	</a>
+</li>
+
+{% else %}
+{# WIP #}
+{% endif %}
+
+{% endmacro %}

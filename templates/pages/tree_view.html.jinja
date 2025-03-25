@@ -1,33 +1,54 @@
 {% extends "base.html.jinja" %}
+{% from "components/entries/pdf_entry.jinja" import pdf_entry with context %}
+{% from "components/entries/file_entry.jinja" import file_entry with context %}
+{% from "components/entries/dir_entry.jinja" import dir_entry with context %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', path='css/pages/tree-view.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', path='css/components/entries/row.css') }}">
+{% endblock %}
+{% block title %}
+{% if parent_dir is not none %}
+{{ parent_dir.name|truncate(20,True) }}
+{% else %}
+/
+{% endif %}
+{% endblock %}
 {% block content %}
-<div>
-	{% if go_back_link is not none %}
-	<li>
-		<a href="{{ url_for('serve_tree_view', path=go_back_link) }}">..</a>
-	</li>
-	{% endif %}
-	<ul>
-		{% for dir in directories %}
-		<li>
-			<a href="{{ url_for('serve_tree_view', path=dir.relpath) }}">
-				{{ dir.name }}
-			</a>
-		</li>
-		{% endfor %}
-		{% for pdf_file in pdfs %}
-		<li>
-			<a href="{{ url_for('serve_pdf', path=pdf_file.relpath) }}">
-				{{ pdf_file.name }}
-			</a>
-		</li>
-		{% endfor %}
-		{% for file in others %}
-		<li>
-			<a href="{{ url_for('serve_tree_view', path=file.relpath) }}">
-				{{ file.name }}
-			</a>
-		</li>
-		{% endfor %}
-	</ul>
-</div>
+<main>
+	<div class="tree-view">
+		{# PAGE TITLE #}
+		<h1 class="tree-view-title">
+			{{ view_title or "All pdfs" }}
+		</h1>
+
+		<ul class="tree-view-entries">
+			{# GO BACK #}
+			{% if parent_dir is not none %}
+			{{ dir_entry(parent_dir, view ='row', is_parent = true) }}
+			{% endif %}
+
+			{% for entry in entries %}
+
+			{% if entry.isfile() %}
+
+			{% if entry.mime == "application/pdf" %}
+			{{ pdf_entry(entry, view = 'row') }}
+			{% else %}
+			{{ file_entry(entry, view = 'row') }}
+
+			{% endif %}
+
+			{% elif entry.isdir() %}
+			{{ dir_entry(entry, view = 'row') }}
+			{% endif %}
+
+			{% endfor %}
+
+		</ul>
+
+	</div>
+
+</main>
 {% endblock %}

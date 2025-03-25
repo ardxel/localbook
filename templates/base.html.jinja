@@ -1,3 +1,5 @@
+{% from "components/header.jinja" import header with context %}
+
 <!DOCTYPE html>
 <html>
 
@@ -6,19 +8,40 @@
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale-1" />
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', path='css/style.css') }}">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@400;500;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', path='css/normalize.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', path='css/framework.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', path='css/colors/light.css') }}" id="theme-link">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', path='css/colors/base.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', path='css/main.css') }}">
 	<link rel="shortcut icon" href="{{ url_for('static', path='/icons/favicon.png') }}" sizes="16x16" type="image/png">
 	<link rel="icon" href="{{ url_for('static', path='icons/favicon-32x32.png') }}" sizes="32x32" type="image/png">
 	<link rel="icon" href="{{ url_for('static', path='icons/favicon-48x48.png') }}" sizes="48x48" type="image/png">
 	<link rel="apple-touch-icon" href="{{ url_for('static', path='icons/apple-touch-icon.png') }}">
 	<link rel="icon" href="{{ url_for('static', path='icons/icon-192x192.png') }}" sizes="192x192" type="image/png">
-	<title>LocalBook</title>
+	<title>{% block title %}Localbook{% endblock %}</title>
 	{% endblock %}
 </head>
 
 <body>
-		{% block content %}
-		{% endblock %}
+	{% block main %}
+
+	{{ header(toggle_view_url) }}
+
+	{% block content %}
+	{% endblock %}
+
+	<footer>
+		{# 2025 #}
+	</footer>
+
+	{% block scripts %}
+	<script type="module" src="{{ url_for('static', path='js/change-theme.js') }}"></script>
+	{% endblock %}
+
+	{% endblock %}
 </body>
 
 </html>

@@ -1,6 +1,5 @@
 ﻿{% extends "base.html.jinja" %}
 {% block head %}
-{{ super() }}
 <script>
 	var PDF_FILE = "{{pdf_file}}"
 	var PDF_WORKER = "{{pdf_worker}}"
@@ -14,7 +13,7 @@
 <script src="{{ url_for('static', path='packages/pdfjs/web/viewer.mjs') }}" type="module"></script>
 <script src="{{ url_for('static', path='js/pdfjs-override-run.js') }}" type="module"></script>
 {% endblock %}
-{% block content %}
+{% block main %}
 <div id="outerContainer">
 
 	<div id="sidebarContainer">
