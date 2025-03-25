@@ -1,0 +1,18 @@
+{# FILE CARD #}
+{% macro file_entry(file, view = 'row') %}
+{% if view == 'row' %}
+<li class="entry-row">
+	<a class="entry-row-anchor" href="{{ url_for('serve_tree_view', path=file.relpath) }}">
+		<div class="entry-row-icon-box file-icon">
+			{% include "icons/file-outline.svg" %}
+		</div>
+		<div class="entry-row-text">
+			<h4 class="entry-row-text-name">{{ file.name }}</h4>
+			<p class="entry-row-text-desc">3/8/22 - 1.2 MB</p>
+		</div>
+	</a>
+</li>
+{% else %}
+{# WIP #}
+{% endif %}
+{% endmacro %}

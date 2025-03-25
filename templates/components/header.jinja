@@ -1,0 +1,35 @@
+{% macro header(toggle_view_url = "list") %}
+<header>
+	{# LOGO #}
+	<div class="logo sun">
+		<img class='maxi' src="{{ url_for('static', path='icons/icon-192x192.png') }}">
+		<h3>Localbook</h3>
+	</div>
+	{# MENU ITEMS #}
+	<ul class="header-menu">
+		{# SEARCH BAR #}
+		<li class="header-menu-item">
+			<label class="text-field search-bar">
+				{% include "icons/search-outline.svg" %}
+				<input class="maxi" type="search" placeholder="Search" name="search">
+			</label>
+		</li>
+		{# THEME SWITCHER #}
+		<li class="header-menu-item">
+			<button type="button" onclick="setTheme('dark')">
+				{% include "icons/theme-outline.svg" %}
+			</button>
+		</li>
+		{# VIEW SWITCHER #}
+		<li class="header-menu-item">
+			<a href="{{ toggle_view_url }}">
+				{% if view_type == "list" %}
+				{% include "icons/list-outline.svg" %}
+				{% elif view_type == "tree" %}
+				{% include "icons/tree-outline.svg" %}
+				{% endif %}
+			</a>
+		</li>
+	</ul>
+</header>
+{% endmacro %}

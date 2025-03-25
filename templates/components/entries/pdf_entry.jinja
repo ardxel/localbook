@@ -1,0 +1,29 @@
+{# PDF CARD #}
+{% macro pdf_entry(pdf, view = 'row') %}
+{% if view == 'card' %}
+<li class="entry-card">
+	<a class="entry-card-link" href="{{ url_for('serve_pdf', path=pdf.relpath) }}">
+		{# TODO: update real image path #}
+		<img class="entry-card-img" src="{{ url_for('static', path="
+			images/pdf/3eebcead7e6e7e9396d5815387c69bd7/desktop.jpeg") }}" />
+		<div class="entry-card-text">
+			<p class="entry-card-name" title="{{ pdf.name }}">
+				{{ pdf.name|trim|truncate(20,True) }}
+			</p>
+		</div>
+	</a>
+</li>
+{% elif view == 'row' %}
+<li class="entry-row">
+	<a class="entry-row-anchor" href="{{ url_for('serve_tree_view', path=pdf.relpath) }}">
+		<div class="entry-row-icon-box pdf-icon">
+			{% include "icons/pdf-outline.svg" %}
+		</div>
+		<div class="entry-row-text">
+			<h4 class="entry-row-text-name">{{ pdf.name }}</h4>
+			<p class="entry-row-text-desc">3/8/22 - 1.2 MB</p>
+		</div>
+	</a>
+</li>
+{% endif %}
+{% endmacro %}
