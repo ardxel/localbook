@@ -1,0 +1,16 @@
+.maxi {
+  width: 100%;
+  height: 100%;
+}
+
+.sun {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.abs {
+  position: absolute;
+  top: 0;
+  left: 0;
+}

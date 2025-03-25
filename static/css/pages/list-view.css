@@ -1,0 +1,24 @@
+main {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  margin-top: 36px;
+}
+
+.list-view {
+  width: 100%;
+  height: 100%;
+  background-color: inherit;
+}
+
+.list-view-title {
+  color: var(--text-primary);
+}
+
+.list-view-entries {
+  width: 100%;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
