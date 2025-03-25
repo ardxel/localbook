@@ -1,0 +1,128 @@
+* {
+  font-family: "Inter", sans-serif;
+  box-sizing: border-box;
+}
+
+input {
+  border: none;
+  background-image: none;
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  outline: none;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: var(--background);
+}
+
+header {
+  flex-shrink: 0;
+  padding: 12px;
+  height: 66px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--surface);
+  overflow: hidden;
+}
+
+main {
+  flex-grow: 1;
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  background-color: var(--background);
+}
+
+footer {
+  padding: 10px;
+  flex-shrink: 0;
+}
+
+.content {
+  background: var(--background);
+}
+
+.logo {
+  max-height: max-content;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--text-primary);
+  column-gap: 16px;
+}
+
+.logo img {
+  height: 42px;
+  width: 42px;
+}
+
+.logo h3 {
+  margin: 0;
+}
+
+.header-menu {
+  display: flex;
+  max-height: 40px;
+  margin: 0;
+}
+
+.header-menu-item {
+  list-style: none;
+  background-color: var(--surface);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.header-menu-item:first-of-type {
+  padding: 0;
+  margin-right: 32px;
+}
+
+.header-menu-item button,
+.header-menu-item a {
+  padding: 10px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.header-menu-item:not(:first-of-type):not(:last-of-type) {
+  margin-right: 8px;
+}
+
+.header-menu-item svg {
+  fill: var(--text-secondary);
+}
+
+.text-field {
+  padding: 8px 16px;
+  overflow: hidden;
+  position: relative;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-secondary);
+}
+
+.text-field.search-bar svg {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.text-field.search-bar input[type="search"] {
+  padding-left: 32px;
+  color: var(--text-secondary);
+}
