@@ -15,7 +15,7 @@
 </li>
 {% elif view == 'row' %}
 <li class="entry-row">
-	<a class="entry-row-anchor" href="{{ url_for('serve_tree_view', path=pdf.relpath) }}">
+	<a class="entry-row-anchor" href="{{ url_for('serve_pdf', path=pdf.relpath) }}">
 		<div class="entry-row-icon-box pdf-icon">
 			{% include "icons/pdf-outline.svg" %}
 		</div>
