@@ -17,6 +17,7 @@ from fastapi.templating import Jinja2Templates
 
 from localbook.dependencies import Deps
 from localbook.exceptions.exceptions import (
+    BadRequestExpection,
     NotFountException,
     UnsupportedMediaTypeException,
 )
@@ -37,42 +38,39 @@ async def serve_tree_view(request: Request, path=""):
     if dir is None and path == "":
         dir = fstree.get_root_node()
     if dir is None:
-        raise NotFountException(f"Error: file '{path}' not found")
+        raise NotFountException(f"Error: directory '{path}' not found")
     if not is_fsdir(dir):
-        raise UnsupportedMediaTypeException(dir)
-    pdfs, others, directories = [], [], []
-    for node in sorted(dir.iter_children(), key=lambda n: n.name):
-        if node.isdir():
-            directories.append(node)
-        elif is_fsfile(node):
-            match node.mime:
-                case "application/pdf":
-                    pdfs.append(node)
-                case _:
-                    others.append(node)
-    go_back_link = dir.parent.relpath if dir.parent is not None else None
+        raise BadRequestExpection(f"Error: {path} is not a directory")
+
+    entries = sorted(dir.iter_children(), key=lambda n: n.name)
+    toggle_view_url = request.url_for("serve_list_view")
     return tmpl.TemplateResponse(
         request=request,
         name=tmplmap.pages.serve_tree_view,
         context={
-            "others": others,
-            "directories": directories,
-            "pdfs": pdfs,
-            "go_back_link": go_back_link,
+            "entries": entries,
+            "parent_dir": dir.parent,
+            "view_type": "tree",
+            "toggle_view_url": toggle_view_url,
         },
     )
 
 
 @router.get("/list", response_class=HTMLResponse)
 async def serve_list_view(request: Request):
-    pdfs = sorted(
+    pdf_files = sorted(
         (node for node in fstree.iter_children(recursive=True) if is_pdf(node)),
         key=lambda pdf: pdf.name,
     )
+    toggle_view_url = request.url_for("serve_tree_view", path="")
     return tmpl.TemplateResponse(
         request=request,
         name=tmplmap.pages.serve_list_view,
-        context={"pdfs": pdfs},
+        context={
+            "pdf_files": pdf_files,
+            "view_type": "list",
+            "toggle_view_url": toggle_view_url,
+        },
     )
 
 
@@ -86,8 +84,9 @@ async def serve_pdf(request: Request, path: str):
         # TODO: implement better error handling in this block
         raise UnsupportedMediaTypeException(pdf_node)
 
-    pdfjs_module = "static/packages/pdfjs"
-    if not os.path.exists(pdfjs_module):
+    # TODO: implement autoload dependencies
+    pdfjs_package = "static/packages/pdfjs"
+    if not os.path.exists(pdfjs_package):
         logger.error("pdfjs module is not exists. Update dependencies by script")
 
     pdf_file = request.url_for("static", path=os.path.join("books", path))

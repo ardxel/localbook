@@ -1,5 +1,5 @@
 {% from "components/entries/pdf_entry.jinja" import pdf_entry with context %}
-{% extends "base.html.jinja" %}
+{% extends "base.jinja" %}
 {% block head %}
 {{ super() }}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='css/pages/list-view.css') }}">
