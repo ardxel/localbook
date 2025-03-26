@@ -25,13 +25,13 @@ backend = ["./localbook"]
 lang = "python"
 [tool.pyright]
 include = ["./localbook"]
-exclude = [ "**/__pycache__" ]
+exclude = [ "**/__pycache__", ".venv" ]
 defineConstant = { DEBUG = true }
-
 reportMissingImports = "error"
 reportMissingTypeStubs = false
-
 pythonPlatform = "Linux"
+venvPath = "."
+venv =".venv"
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.
 exclude = [
