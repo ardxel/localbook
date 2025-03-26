@@ -23,6 +23,15 @@ dependencies = [
 templates = "./templates"
 backend = ["./localbook"]
 lang = "python"
+[tool.pyright]
+include = ["./localbook"]
+exclude = [ "**/__pycache__" ]
+defineConstant = { DEBUG = true }
+
+reportMissingImports = "error"
+reportMissingTypeStubs = false
+
+pythonPlatform = "Linux"
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.
 exclude = [
