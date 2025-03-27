@@ -2,27 +2,29 @@
 # @Project: LocalBook
 # @Author: Vasily Bobnev (@ardxel)
 # @License: MIT License
-# @Date: 18.03.2025 17:21
+# @Date: 26.03.2025 13:20
 # @Repository: https://github.com/ardxel/localbook.git
 # ================================================================
 
 
-from fastapi import HTTPException, status, templating
-from fastapi.responses import JSONResponse
+from fastapi import HTTPException, status
 
-from localbook.lib.filesystem.nodes import FSFile, FSNode, is_fsfile
+from localbook.lib.filesystem import file, node
 
 
 class UnsupportedMediaTypeException(HTTPException):
-    def __init__(self, node: FSNode) -> None:
+    def __init__(self, node: node.FSNode) -> None:
         self.status_code = status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
-        self.mime = node.mime if is_fsfile(node) else "unknown"
+        self.mime = node.mime if file.is_fsfile(node) else "Unsupported Media Type"
 
 
 class NotFountException(HTTPException):
     def __init__(self, detail: str = "") -> None:
         self.status_code = status.HTTP_404_NOT_FOUND
-        if detail:
-            self.detail = detail
-        else:
-            self.detail = "Not found"
+        self.detail = detail if detail else "Not Found"
+
+
+class BadRequestExpection(HTTPException):
+    def __init__(self, detail: str = "") -> None:
+        self.status_code = status.HTTP_400_BAD_REQUEST
+        self.detail = detail if detail else "Bad Request"

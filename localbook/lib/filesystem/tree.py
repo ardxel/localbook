@@ -2,16 +2,20 @@
 # @Project: LocalBook
 # @Author: Vasily Bobnev (@ardxel)
 # @License: MIT License
-# @Date: 18.03.2025 07:03
+# @Date: 26.03.2025 13:34
 # @Repository: https://github.com/ardxel/localbook.git
 # ================================================================
+
 
 import logging
 import os
 import sys
 from typing import Iterable
 
-from .nodes import FSDir, FSFile, FSNode, PDFFile, is_fsdir, is_fsfile, is_pdf
+from .dir import FSDir, is_fsdir
+from .file import FSFile
+from .node import FSNode
+from .pdf import PDFFile, is_pdf
 
 logger = logging.getLogger("localbook")
 

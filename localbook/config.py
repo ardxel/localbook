@@ -2,21 +2,18 @@
 # @Project: LocalBook
 # @Author: Vasily Bobnev (@ardxel)
 # @License: MIT License
-# @Date: 18.03.2025 07:37
+# @Date: 26.03.2025 13:14
 # @Repository: https://github.com/ardxel/localbook.git
 # ================================================================
+
 
 import os
 import sys
 from typing import Tuple, Type
 
 from pydantic import BaseModel
-from pydantic_settings import (
-    BaseSettings,
-    PydanticBaseSettingsSource,
-    SettingsConfigDict,
-    TomlConfigSettingsSource,
-)
+from pydantic_settings import (BaseSettings, PydanticBaseSettingsSource,
+                               SettingsConfigDict, TomlConfigSettingsSource)
 
 from localbook.lib.decorators import singleton
 

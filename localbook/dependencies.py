@@ -2,9 +2,10 @@
 # @Project: LocalBook
 # @Author: Vasily Bobnev (@ardxel)
 # @License: MIT License
-# @Date: 18.03.2025 07:44
+# @Date: 19.03.2025 17:56
 # @Repository: https://github.com/ardxel/localbook.git
 # ================================================================
+
 
 import logging
 import sys

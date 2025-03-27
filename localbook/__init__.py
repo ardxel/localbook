@@ -2,9 +2,10 @@
 # @Project: LocalBook
 # @Author: Vasily Bobnev (@ardxel)
 # @License: MIT License
-# @Date: 18.03.2025 07:17
+# @Date: 26.03.2025 14:56
 # @Repository: https://github.com/ardxel/localbook.git
 # ================================================================
+
 
 import logging
 import os
@@ -15,7 +16,7 @@ from fastapi.staticfiles import StaticFiles
 
 from localbook.dependencies import Deps
 from localbook.exceptions import exception_handlers
-from localbook.router import router
+from localbook.router import LibraryRouter
 
 
 class LocalBook:
@@ -64,7 +65,8 @@ class LocalBook:
 
     def configure_routes(self):
         """ROUTING"""
-        self.app.include_router(router)
+        library_router = LibraryRouter()
+        self.app.include_router(library_router.get_router())
 
     def _check_static(self):
         logger = logging.getLogger("localbook")
