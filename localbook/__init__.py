@@ -14,9 +14,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
+from localbook.controller.library import router as library_router
 from localbook.dependencies import Deps
 from localbook.exceptions import exception_handlers
-from localbook.router import LibraryRouter
 
 
 class LocalBook:
@@ -65,8 +65,7 @@ class LocalBook:
 
     def configure_routes(self):
         """ROUTING"""
-        library_router = LibraryRouter()
-        self.app.include_router(library_router.get_router())
+        self.app.include_router(library_router)
 
     def _check_static(self):
         logger = logging.getLogger("localbook")

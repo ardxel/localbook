@@ -14,7 +14,7 @@ from .node import FSNode
 def _read_mime(arg: FSNode | str) -> str:
     try:
         if isinstance(arg, FSNode):
-            filepath = arg.path
+            filepath = arg._path
         elif isinstance(arg, str):
             filepath = arg
 

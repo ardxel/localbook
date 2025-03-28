@@ -62,9 +62,14 @@ class FSTree:
         return self.root_node
 
     def root_relative(self, path: str) -> str:
-        return os.path.relpath(path, self.root_node.path)
+        return os.path.relpath(path, self.root_node._path)
 
     def get_node(self, path: str) -> FSNode | None:
+        normalized_path = os.path.normpath(path)  # remove possible ".." in path
+        full_path = os.path.join(self.root_node._path, normalized_path)
+        if not full_path.startswith(self.root_node._path):
+            return None
+
         return self.node_map.get(path)
 
     def iter_children(
@@ -87,3 +92,6 @@ class FSTree:
                     yield node
             else:
                 yield node
+
+    def pdf_list(self) -> list[PDFFile]:
+        return [f for f in self.iter_children(recursive=True) if is_pdf(f)]

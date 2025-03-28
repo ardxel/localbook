@@ -13,64 +13,27 @@ from logging import getLogger
 from fastapi.requests import Request
 
 from localbook.dependencies import Deps
-from localbook.lib.filesystem.dir import is_fsdir
-from localbook.lib.filesystem.pdf import is_pdf
-from localbook.templates import LBTmplMap
-
-from .exceptions.exceptions import (
-    BadRequestExpection,
+from localbook.exceptions.exceptions import (
     NotFountException,
     UnsupportedMediaTypeException,
 )
+from localbook.lib.filesystem.pdf import is_pdf
+from localbook.templates import TemplateMap
 
 
-class LBLibraryService:
-    def __init__(self) -> None:
-        deps = Deps()
+class PDFImageService:
+    def __init__(self, deps: Deps = Deps()) -> None:
+        self.fstree = deps.get_fstree()
+        self.setting = deps.get_settings()
+
+
+class PDFService:
+    def __init__(self, deps: Deps = Deps()) -> None:
         self.tmpl = deps.get_tmpl()
         self.settings = deps.get_settings()
         self.fstree = deps.get_fstree()
-        self.tmplmap = LBTmplMap()
+        self.tmplmap = TemplateMap()
         self.logger = getLogger("localbook")
-
-    async def serve_tree_view(self, request: Request, path=""):
-        dir = self.fstree.get_node(path)
-        if dir is None and path == "":
-            dir = self.fstree.get_root_node()
-        if dir is None:
-            raise NotFountException(f"Error: directory '{path}' not found")
-        if not is_fsdir(dir):
-            raise BadRequestExpection(f"Error: {path} is not a directory")
-
-        entries = sorted(dir.iter_children(), key=lambda n: n.name)
-        toggle_view_url = request.url_for("serve_list_view")
-        return self.tmpl.TemplateResponse(
-            request=request,
-            name=self.tmplmap.pages.serve_tree_view,
-            context={
-                "entries": entries,
-                "parent_dir": dir.parent,
-                "view_type": "tree",
-                "toggle_view_url": toggle_view_url,
-            },
-        )
-
-    async def serve_list_view(self, request: Request):
-        iter_all_files = self.fstree.iter_children(recursive=True)
-        pdf_files = sorted(
-            (node for node in iter_all_files if is_pdf(node)),
-            key=lambda pdf: pdf.name,
-        )
-        toggle_view_url = request.url_for("serve_tree_view", path="")
-        return self.tmpl.TemplateResponse(
-            request=request,
-            name=self.tmplmap.pages.serve_list_view,
-            context={
-                "pdf_files": pdf_files,
-                "view_type": "list",
-                "toggle_view_url": toggle_view_url,
-            },
-        )
 
     async def serve_pdf(self, request: Request, path: str):
         """use pdfjs library to render pdf documents"""
@@ -97,10 +60,14 @@ class LBLibraryService:
         )
         return self.tmpl.TemplateResponse(
             request=request,
-            name=self.tmplmap.pages.pdfviewer,
+            name=self.tmplmap.pdfviewer,
             context={
                 "pdf_file": pdf_file,
                 "pdf_worker": pdf_worker,
                 "pdf_sandbox": pdf_sandbox,
             },
         )
+
+
+def get_pdf_service():
+    return PDFService()

@@ -10,18 +10,18 @@
 from fastapi import HTTPException, Request
 
 from localbook.dependencies import Deps
-from localbook.templates import LBTmplMap
+from localbook.templates import TemplateMap
 
 from .exceptions import BadRequestExpection, UnsupportedMediaTypeException
 
 tmpl = Deps().get_tmpl()
-tmplmap = LBTmplMap()
+tmplmap = TemplateMap()
 
 
 async def not_found_handler(request: Request, exc: HTTPException):
     return tmpl.TemplateResponse(
         request,
-        name=tmplmap.pages.err404,
+        name=tmplmap.err404,
     )
 
 
@@ -31,7 +31,7 @@ async def unsupported_media_type_handler(
 ):
     return tmpl.TemplateResponse(
         request,
-        name=tmplmap.pages.err415,
+        name=tmplmap.err415,
         context={"bad_mime": exc.mime or "unknown"},
     )
 
@@ -40,5 +40,5 @@ async def bad_request_handler(request: Request, exc: BadRequestExpection):
     # TODO: create specific template for handling bad request error
     return tmpl.TemplateResponse(
         request,
-        name=tmplmap.pages.err404,
+        name=tmplmap.err404,
     )

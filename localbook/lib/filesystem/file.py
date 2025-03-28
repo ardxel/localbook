@@ -15,7 +15,7 @@ from .utils import _read_mime
 class FSFile(FSNode):
     def __init__(self, path: str, parent) -> None:
         super().__init__("f", path, parent)
-        self.mime = _read_mime(self.path)
+        self.mime = _read_mime(self._path)
 
     def isfile(self) -> bool:
         return True
