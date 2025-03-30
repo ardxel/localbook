@@ -47,8 +47,12 @@ def _build_tree(root_path: str, max_depth=sys.maxsize) -> FSDir:
 
 
 class FSTree:
-    def __init__(self, root: str, max_depth=3) -> None:
-        self.root_node = _build_tree(root, max_depth)
+    def __init__(self, root: str | FSDir, max_depth=sys.maxsize) -> None:
+        self.max_depth = max_depth
+        if isinstance(root, FSDir):
+            self.root_node = root
+        else:
+            self.root_node = _build_tree(root, max_depth)
         self.node_map: dict[str, FSNode] = {}
         stack: list[FSNode] = [self.root_node]
         while stack:
@@ -74,24 +78,29 @@ class FSTree:
 
     def iter_children(
         self,
-        dir_node: FSDir | None = None,
+        entry_node: FSDir | None = None,
         recursive=False,
         ignore_dir_node=False,
     ) -> Iterable[FSNode]:
-        if dir_node is None:
-            dir_node = self.get_root_node()
-        if ignore_dir_node:
-            yield dir_node
-        for node in dir_node.iter_children():
+        if entry_node is None:
+            entry_node = self.get_root_node()
+
+        for node in entry_node.iter_children():
             if is_fsdir(node):
                 if recursive:
-                    yield from self.iter_children(node)
-                if ignore_dir_node:
-                    continue
-                else:
+                    yield from self.iter_children(
+                        entry_node=node,
+                        recursive=True,
+                        ignore_dir_node=ignore_dir_node,
+                    )
+                if not ignore_dir_node:
                     yield node
             else:
                 yield node
 
     def pdf_list(self) -> list[PDFFile]:
-        return [f for f in self.iter_children(recursive=True) if is_pdf(f)]
+        return [
+            f
+            for f in self.iter_children(recursive=True, ignore_dir_node=True)
+            if is_pdf(f)
+        ]

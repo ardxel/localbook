@@ -6,17 +6,26 @@
 # @Repository: https://github.com/ardxel/localbook.git
 # ================================================================
 
+import itertools
 import os
 from typing import Optional
 
 
+class nid(int):
+    def __new__(cls, value: int):
+        return super().__new__(cls, value)
+
+
 class FSNode:
+    _node_counter = itertools.count()
+
     def __init__(
         self,
         typo: str,
         path: str,
         parent: Optional["FSNode"] = None,
     ) -> None:
+        self.nid: nid = nid(next(FSNode._node_counter))
         # type of node: file or directory: "f" | "d"
         self.typo = typo
         self._path = path
