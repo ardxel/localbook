@@ -16,7 +16,7 @@ class FSDir(FSNode):
         self,
         path: str,
         parent: Optional["FSDir"] = None,
-        children: list[FSNode] | None = None,
+        children: Optional[list[FSNode]] = None,
     ) -> None:
         super().__init__("d", path, parent)
         self.children: list[FSNode] = children or []

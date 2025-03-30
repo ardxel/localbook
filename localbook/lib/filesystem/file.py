@@ -6,16 +6,24 @@
 # @Repository: https://github.com/ardxel/localbook.git
 # ================================================================
 
-from typing import TypeGuard
+import os
+from typing import Optional, TypeGuard
 
+from .dir import FSDir
 from .node import FSNode
 from .utils import _read_mime
 
 
 class FSFile(FSNode):
-    def __init__(self, path: str, parent) -> None:
+    def __init__(
+        self,
+        path: str,
+        parent: Optional[FSDir],
+        mime: Optional[str] = None,
+    ) -> None:
         super().__init__("f", path, parent)
-        self.mime = _read_mime(self._path)
+        self.mime = mime or _read_mime(self._path)
+        self.size = os.stat(path).st_size
 
     def isfile(self) -> bool:
         return True
