@@ -2,7 +2,7 @@
 # @Project: LocalBook
 # @Author: Vasily Bobnev (@ardxel)
 # @License: MIT License
-# @Date: 26.03.2025 13:15
+# @Date: 03.04.2025 12:19
 # @Repository: https://github.com/ardxel/localbook.git
 # ================================================================
 
@@ -20,10 +20,11 @@ class FSFile(FSNode):
         path: str,
         parent: Optional[FSDir],
         mime: Optional[str] = None,
+        size: Optional[int] = None,
     ) -> None:
         super().__init__("f", path, parent)
         self.mime = mime or _read_mime(self._path)
-        self.size = os.stat(path).st_size
+        self.size = size or os.stat(path).st_size
 
     def isfile(self) -> bool:
         return True
