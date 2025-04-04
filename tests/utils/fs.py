@@ -1,9 +1,17 @@
 import os
 from typing import Any
+from unittest.mock import MagicMock, patch
 
 from localbook.lib.filesystem.dir import FSDir
 from localbook.lib.filesystem.file import FSFile
 from localbook.lib.filesystem.pdf import PDFFile
+
+
+def read_mime_side_effect(path: str):
+    if path.endswith(".pdf"):
+        return "application/pdf"
+    else:
+        return "text/plain"
 
 
 def get_tmp_struct():
@@ -57,21 +65,30 @@ def create_stub_tree(structure: dict[str, Any], _rpath: str = "/") -> FSDir:
         if isinstance(content, dict):
             root.children.append(create_stub_tree(content, os.path.join(_rpath, name)))
         elif content is None:
-            root.children.append(
-                FSFile(
-                    os.path.join(_rpath, name),
-                    parent=root,
-                    mime="text/plain",
-                    size=10,
+            with (
+                patch("localbook.lib.filesystem.file.os.stat") as mock_stat,
+                patch("localbook.lib.filesystem.file._read_mime") as mock_mime,
+            ):
+                mock_stat.return_value = MagicMock(st_size=1)
+                mock_mime.side_effect = read_mime_side_effect
+
+                root.children.append(
+                    FSFile(
+                        os.path.join(_rpath, name),
+                        parent=root,
+                    )
                 )
-            )
         elif isinstance(content, str):
-            root.children.append(
-                PDFFile(
-                    os.path.join(_rpath, name),
-                    parent=root,
-                    mime="application/pdf",
-                    size=10,
+            with (
+                patch("localbook.lib.filesystem.file.os.stat") as mock_stat,
+                patch("localbook.lib.filesystem.file._read_mime") as mock_mime,
+            ):
+                mock_stat.return_value = MagicMock(st_size=1)
+                mock_mime.side_effect = read_mime_side_effect
+                root.children.append(
+                    PDFFile(
+                        os.path.join(_rpath, name),
+                        parent=root,
+                    )
                 )
-            )
     return root

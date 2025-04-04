@@ -40,6 +40,7 @@ class TestFSBuilder(unittest.TestCase):
         self.assertIsInstance(file1, FSFile)
         self.assertIsInstance(file2, FSFile)
         self.assertIsInstance(file3, FSFile)
+        tmp_dir.cleanup()
 
 
 class TestFSTree(unittest.TestCase):
