@@ -2,13 +2,10 @@
 # @Project: LocalBook
 # @Author: Vasily Bobnev (@ardxel)
 # @License: MIT License
-# @Date: 26.03.2025 14:56
+# @Date: 03.04.2025 12:19
 # @Repository: https://github.com/ardxel/localbook.git
 # ================================================================
 
-
-import logging
-import os
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -23,8 +20,6 @@ class LocalBook:
     def __init__(self) -> None:
         self.app = FastAPI()
         self._dependencies = Deps()
-
-        self.app.add_event_handler("startup", self._check_static)
         self.cors()
         self.static()
         self.configure_exceptions()
@@ -66,17 +61,3 @@ class LocalBook:
     def configure_routes(self):
         """ROUTING"""
         self.app.include_router(library_router)
-
-    def _check_static(self):
-        logger = logging.getLogger("localbook")
-
-        if not os.path.exists("static/books"):
-            logger.warning(
-                "User data is not exists in static. Please use special script"
-            )
-
-        if not os.path.exists("static/books/jpeg"):
-            logger.warning("PDF images is not generated. Plese use special script")
-
-        if not os.path.exists("static/packages/pdfjs"):
-            logger.warning("pdfjs module is not exists. Please use special script")
