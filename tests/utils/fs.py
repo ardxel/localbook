@@ -1,17 +1,9 @@
 import os
 from typing import Any
-from unittest.mock import MagicMock, patch
 
 from localbook.lib.filesystem.dir import FSDir
 from localbook.lib.filesystem.file import FSFile
 from localbook.lib.filesystem.pdf import PDFFile
-
-
-def read_mime_side_effect(path: str):
-    if path.endswith(".pdf"):
-        return "application/pdf"
-    else:
-        return "text/plain"
 
 
 def get_tmp_struct():
@@ -34,6 +26,14 @@ def get_all_nodes():
         "dir3/dir4/file3.txt",
         "file4.txt",
     ]
+
+
+def mock_fsfile(path: str, parent: FSDir):
+    return FSFile(path, parent, mime="text/plain", size=1, mtime=3.14)
+
+
+def mock_pdffile(path: str, parent: FSDir):
+    return PDFFile(path, parent, mime="application/pdf", size=1, mtime=3.14)
 
 
 def create_tmp_tree(base_dir: str, structure: dict[str, Any]) -> None:
@@ -59,36 +59,26 @@ def create_tmp_tree(base_dir: str, structure: dict[str, Any]) -> None:
                     fake.write(original.read())
 
 
-def create_stub_tree(structure: dict[str, Any], _rpath: str = "/") -> FSDir:
+def create_stub_tree(
+    structure: dict[str, Any],
+    _rpath: str = "/",
+) -> FSDir:
     root = FSDir(_rpath, None)
     for name, content in structure.items():
         if isinstance(content, dict):
             root.children.append(create_stub_tree(content, os.path.join(_rpath, name)))
         elif content is None:
-            with (
-                patch("localbook.lib.filesystem.file.os.stat") as mock_stat,
-                patch("localbook.lib.filesystem.file._read_mime") as mock_mime,
-            ):
-                mock_stat.return_value = MagicMock(st_size=1)
-                mock_mime.side_effect = read_mime_side_effect
-
-                root.children.append(
-                    FSFile(
-                        os.path.join(_rpath, name),
-                        parent=root,
-                    )
+            root.children.append(
+                mock_fsfile(
+                    os.path.join(_rpath, name),
+                    parent=root,
                 )
+            )
         elif isinstance(content, str):
-            with (
-                patch("localbook.lib.filesystem.file.os.stat") as mock_stat,
-                patch("localbook.lib.filesystem.file._read_mime") as mock_mime,
-            ):
-                mock_stat.return_value = MagicMock(st_size=1)
-                mock_mime.side_effect = read_mime_side_effect
-                root.children.append(
-                    PDFFile(
-                        os.path.join(_rpath, name),
-                        parent=root,
-                    )
+            root.children.append(
+                mock_pdffile(
+                    os.path.join(_rpath, name),
+                    parent=root,
                 )
+            )
     return root
