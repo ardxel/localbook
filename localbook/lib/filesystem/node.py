@@ -6,26 +6,32 @@
 # @Repository: https://github.com/ardxel/localbook.git
 # ================================================================
 
-import itertools
+import hashlib
 import os
 from typing import Optional
 
 
-class nid(int):
-    def __new__(cls, value: int):
+class nid(str):
+    def __new__(cls, path: str, hash: bool = True):
+        if hash:
+            value = hashlib.sha256(path.encode()).hexdigest()
+        else:
+            value = path
         return super().__new__(cls, value)
+
+    def __repr__(self):
+        return f"nid({str(self)}...)"
 
 
 class FSNode:
-    _node_counter = itertools.count()
-
     def __init__(
         self,
         typo: str,
         path: str,
         parent: Optional["FSNode"] = None,
+        **kwargs,
     ) -> None:
-        self.nid: nid = nid(next(FSNode._node_counter))
+        self.nid: str = kwargs.get("_nid", nid(path))
         # type of node: file or directory: "f" | "d"
         self.typo = typo
         self._path = path
