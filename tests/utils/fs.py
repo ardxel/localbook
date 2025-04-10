@@ -3,7 +3,9 @@ from typing import Any
 
 from localbook.lib.filesystem.dir import FSDir
 from localbook.lib.filesystem.file import FSFile
+from localbook.lib.filesystem.node import nid
 from localbook.lib.filesystem.pdf import PDFFile
+from localbook.service.pdf.cover import _PDFCoverInfo
 
 
 def get_tmp_struct():
@@ -28,12 +30,40 @@ def get_all_nodes():
     ]
 
 
-def mock_fsfile(path: str, parent: FSDir):
-    return FSFile(path, parent, mime="text/plain", size=1, mtime=3.14)
+def mock_fsfile(path: str, parent: FSDir, _nid: str = "1"):
+    return FSFile(
+        path,
+        parent,
+        mime="text/plain",
+        size=1,
+        mtime=3.14,
+        _nid=_nid,
+    )
 
 
-def mock_pdffile(path: str, parent: FSDir):
-    return PDFFile(path, parent, mime="application/pdf", size=1, mtime=3.14)
+def mock_pdffile(path: str, parent: FSDir, _nid: str = "1"):
+    return PDFFile(
+        path,
+        parent,
+        mime="application/pdf",
+        size=1,
+        mtime=3.14,
+        _nid=_nid,
+    )
+
+
+def mock_cover_info(
+    path: str = "/root/test.pdf",
+    pdf_nid: str = "1",
+    thumbnails: dict[str, str] = {},
+    mtime=3.14,
+):
+    return _PDFCoverInfo(
+        path,
+        pdf_nid=nid(pdf_nid, hash=False),
+        thumbnails=thumbnails,
+        mtime=mtime,
+    )
 
 
 def create_tmp_tree(base_dir: str, structure: dict[str, Any]) -> None:
