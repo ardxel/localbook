@@ -17,8 +17,9 @@ class FSDir(FSNode):
         path: str,
         parent: Optional["FSDir"] = None,
         children: Optional[list[FSNode]] = None,
+        **kwargs,
     ) -> None:
-        super().__init__("d", path, parent)
+        super().__init__(path, parent, **kwargs, typo="d")
         self.children: list[FSNode] = children or []
 
     def isdir(self) -> bool:

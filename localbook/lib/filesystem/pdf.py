@@ -20,11 +20,9 @@ class PDFFile(FSFile):
         path: str,
         parent: Optional["FSDir"],
         mime: Optional[str] = None,
-        size: Optional[int] = None,
-        mtime: Optional[float] = None,
         **kwargs,
     ) -> None:
-        super().__init__(path, parent, mime, size, mtime, **kwargs)
+        super().__init__(path, parent, mime, **kwargs)
 
 
 def is_pdf(arg: FSNode | str | None) -> bool:

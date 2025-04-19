@@ -8,10 +8,13 @@
 
 import hashlib
 import os
+from datetime import datetime
 from typing import Optional
 
+from hurry.filesize import alternative, size
 
-class nid(str):
+
+class NID(str):
     def __new__(cls, path: str, hash: bool = True):
         if hash:
             value = hashlib.sha256(path.encode()).hexdigest()
@@ -26,17 +29,19 @@ class nid(str):
 class FSNode:
     def __init__(
         self,
-        typo: str,
         path: str,
         parent: Optional["FSNode"] = None,
         **kwargs,
     ) -> None:
-        self.nid: str = kwargs.get("_nid", nid(path))
-        # type of node: file or directory: "f" | "d"
-        self.typo = typo
         self._path = path
         self.parent = parent
+        # type of node: file or directory: "f" | "d"
+        self.__typo = kwargs.get("typo", "f")
+        self.__nid: str = kwargs.get("_nid") or NID(path)
+        self.size: int = kwargs.get("size") or os.stat(path).st_size
+        self.mtime = kwargs.get("mtime") or os.path.getmtime(path)
         self.name = os.path.basename(path)
+
         # `relpath` is a trimmed absolute path to prevent the client
         # from seeing real system paths.
         # Users can access files and directories only via this relative path.
@@ -49,8 +54,20 @@ class FSNode:
         if self.parent is not None:
             self.relpath = os.path.join(self.parent.relpath, self.name)
 
+    @property
+    def nid(self) -> str:
+        return str(self.__nid)
+
     def isfile(self) -> bool:
         return False
 
     def isdir(self) -> bool:
         return False
+
+    def strmtime(self, format: str) -> str:
+        """format mtime"""
+        return datetime.fromtimestamp(self.mtime).strftime(format)
+
+    def strsize(self) -> str:
+        """pretty node size"""
+        return size(self.size, system=alternative)
