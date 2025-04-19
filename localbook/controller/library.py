@@ -1,10 +1,19 @@
+# ================================================================
+# @Project: LocalBook
+# @Author: Vasily Bobnev (@ardxel)
+# @License: MIT License
+# @Date: 19.04.2025 16:27
+# @Repository: https://github.com/ardxel/localbook.git
+# ================================================================
+
+
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse
 
+from localbook.service.book import BookService, get_book_service
 from localbook.service.library import LibraryService, get_lib_service
-from localbook.service.pdf import PDFService, get_pdf_service
 
 router = APIRouter(prefix="/library")
 
@@ -26,10 +35,10 @@ async def serve_list_view(
     return await service.serve_list_view(request)
 
 
-@router.get("/pdf-view/{path:path}", response_class=HTMLResponse)
-async def serve_pdf(
-    service: Annotated[PDFService, Depends(get_pdf_service)],
+@router.get("/book/{path:path}", response_class=HTMLResponse)
+async def serve_book(
+    service: Annotated[BookService, Depends(get_book_service)],
     request: Request,
     path: str,
 ):
-    return await service.serve_pdf(request, path)
+    return await service.serve_book(request, path)

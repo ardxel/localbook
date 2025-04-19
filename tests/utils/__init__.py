@@ -1,3 +1,11 @@
+# ================================================================
+# @Project: LocalBook
+# @Author: Vasily Bobnev (@ardxel)
+# @License: MIT License
+# @Date: 19.04.2025 16:22
+# @Repository: https://github.com/ardxel/localbook.git
+# ================================================================
+
 import os
 from typing import Any
 
@@ -6,7 +14,7 @@ from localbook.lib.filesystem.file import FSFile
 from localbook.lib.filesystem.node import NID
 from localbook.lib.filesystem.pdf import PDFFile
 from localbook.lib.filesystem.tree import FSTree
-from localbook.service.pdf.cover import _PDFCoverInfo
+from localbook.service.book.cover import _BookCoverInfo
 
 
 def get_tmp_struct():
@@ -83,7 +91,7 @@ def mock_cover_info(
     thumbnails: dict[str, str] = {},
     mtime=3.14,
 ):
-    return _PDFCoverInfo(
+    return _BookCoverInfo(
         path,
         pdf_nid=NID(pdf_nid, hash=False),
         thumbnails=thumbnails,

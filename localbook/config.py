@@ -2,7 +2,7 @@
 # @Project: LocalBook
 # @Author: Vasily Bobnev (@ardxel)
 # @License: MIT License
-# @Date: 26.03.2025 13:14
+# @Date: 19.04.2025 16:27
 # @Repository: https://github.com/ardxel/localbook.git
 # ================================================================
 
@@ -12,8 +12,12 @@ import sys
 from typing import Tuple, Type
 
 from pydantic import BaseModel
-from pydantic_settings import (BaseSettings, PydanticBaseSettingsSource,
-                               SettingsConfigDict, TomlConfigSettingsSource)
+from pydantic_settings import (
+    BaseSettings,
+    PydanticBaseSettingsSource,
+    SettingsConfigDict,
+    TomlConfigSettingsSource,
+)
 
 from localbook.lib.decorators import singleton
 
@@ -55,7 +59,7 @@ class FSSettings(BaseModel):
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(toml_file="config.toml")
     server: ServerSettings
-    system: FSSettings
+    fs: FSSettings
 
     @classmethod
     def settings_customise_sources(

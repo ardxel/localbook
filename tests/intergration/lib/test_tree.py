@@ -1,8 +1,16 @@
+# ================================================================
+# @Project: LocalBook
+# @Author: Vasily Bobnev (@ardxel)
+# @License: MIT License
+# @Date: 11.04.2025 11:51
+# @Repository: https://github.com/ardxel/localbook.git
+# ================================================================
+
 import copy
 import sys
 import tempfile
 
-from utils.fs import create_tmp_tree, get_all_nodes
+from utils import create_tmp_tree
 
 from localbook.lib.filesystem.dir import FSDir
 from localbook.lib.filesystem.file import FSFile

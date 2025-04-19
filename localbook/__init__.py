@@ -2,7 +2,7 @@
 # @Project: LocalBook
 # @Author: Vasily Bobnev (@ardxel)
 # @License: MIT License
-# @Date: 03.04.2025 12:19
+# @Date: 19.04.2025 16:27
 # @Repository: https://github.com/ardxel/localbook.git
 # ================================================================
 
@@ -14,6 +14,7 @@ from fastapi.staticfiles import StaticFiles
 from localbook.controller.library import router as library_router
 from localbook.dependencies import Deps
 from localbook.exceptions import exception_handlers
+from localbook.service.book.cover import BookCoverGenerator
 
 
 class LocalBook:
@@ -26,14 +27,14 @@ class LocalBook:
         self.configure_routes()
 
     def cors(self):
-        port = self._dependencies.get_settings().server.port
+        """CORS"""
+        port = self._dependencies.settings.server.port
         origins = [
             f"http://localhost:{port}",
             f"http://0.0.0.0:{port}",
             f"http://127.0.0.1:{port}",
         ]
 
-        """CORS"""
         self.app.add_middleware(
             CORSMiddleware,
             allow_origins=origins,
@@ -44,6 +45,15 @@ class LocalBook:
 
     def static(self):
         """STATIC"""
+        pdf_cover_generator = BookCoverGenerator()
+        pdf_cover_generator.generate()
+
+        self.app.mount(
+            "/build/images",
+            StaticFiles(directory="build/images", follow_symlink=False),
+            name="build/images",
+        )
+
         self.app.mount(
             "/static",
             StaticFiles(directory="static", follow_symlink=True),

@@ -2,9 +2,9 @@
 port = 3102
 host = 'localhost'
 debug = true
-mode = "development"
+mode="development"
 
-[system]
+[fs]
 user_data_location ="/home/ardxel/books"
 extend_data = false
 dfs_max_depth = 999

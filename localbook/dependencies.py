@@ -2,7 +2,7 @@
 # @Project: LocalBook
 # @Author: Vasily Bobnev (@ardxel)
 # @License: MIT License
-# @Date: 03.04.2025 12:19
+# @Date: 19.04.2025 16:27
 # @Repository: https://github.com/ardxel/localbook.git
 # ================================================================
 
@@ -40,7 +40,7 @@ class _AppLogger:
                 logger.setLevel(logging.ERROR)
             case "production":
                 logger.setLevel(logging.WARNING)
-
+        logger.exception
         if not logger.hasHandlers():
             console_handler = logging.StreamHandler(sys.stdout)
             console_handler.setLevel(logger.getEffectiveLevel())

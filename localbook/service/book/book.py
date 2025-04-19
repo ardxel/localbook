@@ -2,40 +2,41 @@
 # @Project: LocalBook
 # @Author: Vasily Bobnev (@ardxel)
 # @License: MIT License
-# @Date: 26.03.2025 14:48
+# @Date: 19.04.2025 16:27
 # @Repository: https://github.com/ardxel/localbook.git
 # ================================================================
 
 
 import os
 from logging import getLogger
+from typing import Optional
 
 from fastapi.requests import Request
+from fastapi.templating import Jinja2Templates
 
-from localbook.dependencies import Deps
+from localbook.dependencies import get_fstree, get_jinja2
 from localbook.exceptions.exceptions import (
     NotFountException,
     UnsupportedMediaTypeException,
 )
 from localbook.lib.filesystem.pdf import is_pdf
+from localbook.lib.filesystem.tree import FSTree
 from localbook.templates import TemplateMap
 
 
-class PDFImageService:
-    def __init__(self, deps: Deps = Deps()) -> None:
-        self.fstree = deps.get_fstree()
-        self.setting = deps.get_settings()
-
-
-class PDFService:
-    def __init__(self, deps: Deps = Deps()) -> None:
-        self.tmpl = deps.get_tmpl()
-        self.settings = deps.get_settings()
-        self.fstree = deps.get_fstree()
-        self.tmplmap = TemplateMap()
+class BookService:
+    def __init__(
+        self,
+        jinja2: Optional[Jinja2Templates] = None,
+        fstree: Optional[FSTree] = None,
+        tmpl_map: Optional[TemplateMap] = None,
+    ) -> None:
+        self.jinja2 = jinja2 or get_jinja2()
+        self.fstree = fstree or get_fstree()
+        self.tmplmap = tmpl_map or TemplateMap()
         self.logger = getLogger("localbook")
 
-    async def serve_pdf(self, request: Request, path: str):
+    async def serve_book(self, request: Request, path: str):
         """use pdfjs library to render pdf documents"""
         pdf_node = self.fstree.get_node(path)
         if not pdf_node:
@@ -58,7 +59,7 @@ class PDFService:
         pdf_sandbox = request.url_for(
             "static", path="packages/pdfjs/build/pdf.sandbox.mjs"
         )
-        return self.tmpl.TemplateResponse(
+        return self.jinja2.TemplateResponse(
             request=request,
             name=self.tmplmap.pdfviewer,
             context={
@@ -69,5 +70,5 @@ class PDFService:
         )
 
 
-def get_pdf_service():
-    return PDFService()
+def get_book_service():
+    return BookService()
