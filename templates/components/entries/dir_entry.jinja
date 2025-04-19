@@ -10,7 +10,7 @@
 		</div>
 		<div class="entry-row-text">
 			<h4 class="entry-row-text-name">{{ dir.name if is_parent is false else ".." }}</h4>
-			<p class="entry-row-text-desc">3/8/22 - 1.2 MB</p>
+			<p class="entry-row-text-desc">{{ dir.strmtime('%d-%m-%y') }}</p>
 		</div>
 	</a>
 </li>
