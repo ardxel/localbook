@@ -2,7 +2,7 @@
 # @Project: LocalBook
 # @Author: Vasily Bobnev (@ardxel)
 # @License: MIT License
-# @Date: 18.03.2025 17:29
+# @Date: 19.04.2025 16:27
 # @Repository: https://github.com/ardxel/localbook.git
 # ================================================================
 
@@ -29,7 +29,6 @@ def header(mtime: str) -> str:
             f"# @Date: {mtime}",
             "# @Repository: https://github.com/ardxel/localbook.git",
             "# ================================================================",
-            "",
         ]
     )
 
@@ -87,13 +86,16 @@ def update_header_recursive(root: str):
 
 def main() -> None:
     root = git_root()
-    localbook_dir = os.path.join(root, "localbook")
-    scripts_dir = os.path.join(root, "scripts")
+    dirs = [
+        os.path.join(root, "localbook"),
+        os.path.join(root, "scripts"),
+        os.path.join(root, "tests"),
+    ]
     mainpy = os.path.join(root, "main.py")
-
-    update_header_recursive(localbook_dir)
-    update_header_recursive(scripts_dir)
     update_header(mainpy)
+
+    for dir in dirs:
+        update_header_recursive(dir)
 
 
 if __name__ == "__main__":
