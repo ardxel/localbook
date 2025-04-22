@@ -1,5 +1,5 @@
 * {
-  font-family: "Inter", sans-serif;
+  font-family: var(--font-base);
   box-sizing: border-box;
 }
 
@@ -17,48 +17,47 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: var(--background);
+  background-color: var(--color-background);
 }
 
 header {
   flex-shrink: 0;
-  padding: 12px;
-  height: 66px;
+  padding: var(--space-sm);
+  height: var(--size-header-height);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--surface);
+  border-bottom: 1px solid var(--color-surface);
   overflow: hidden;
 }
 
 main {
   flex-grow: 1;
-  padding: 20px;
+  padding: var(--space-md);
   width: 100%;
   height: 100%;
-  background-color: var(--background);
+  background-color: var(--color-background);
 }
 
 footer {
-  padding: 10px;
+  padding: var(--space-sm);
   flex-shrink: 0;
 }
 
 .content {
-  background: var(--background);
+  background: var(--color-background);
 }
 
 .logo {
-  max-height: max-content;
-  font-size: 18px;
-  font-weight: bold;
-  color: var(--text-primary);
-  column-gap: 16px;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  column-gap: var(--space-md);
 }
 
 .logo img {
-  height: 42px;
-  width: 42px;
+  height: var(--size-logo);
+  width: var(--size-logo);
 }
 
 .logo h3 {
@@ -73,20 +72,20 @@ footer {
 
 .header-menu-item {
   list-style: none;
-  background-color: var(--surface);
-  border-radius: 12px;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
   position: relative;
   overflow: hidden;
 }
 
 .header-menu-item:first-of-type {
   padding: 0;
-  margin-right: 32px;
+  margin-right: var(--space-xl);
 }
 
 .header-menu-item button,
 .header-menu-item a {
-  padding: 10px;
+  padding: var(--space-sm);
   width: 100%;
   height: 100%;
   display: flex;
@@ -98,7 +97,7 @@ footer {
 }
 
 .header-menu-item:not(:first-of-type):not(:last-of-type) {
-  margin-right: 8px;
+  margin-right: var(--space-sm);
 }
 
 .header-menu-item svg {
@@ -106,23 +105,23 @@ footer {
 }
 
 .text-field {
-  padding: 8px 16px;
-  overflow: hidden;
-  position: relative;
-  font-size: 16px;
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-base);
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--text-secondary);
+  color: var(--color-text-secondary);
+  position: relative;
+  overflow: hidden;
 }
 
 .text-field.search-bar svg {
   position: absolute;
-  left: 16px;
+  left: var(--space-md);
   top: 50%;
   transform: translateY(-50%);
 }
 .text-field.search-bar input[type="search"] {
-  padding-left: 32px;
-  color: var(--text-secondary);
+  padding-left: calc(var(--space-md) * 2);
+  color: var(--color-text-secondary);
 }

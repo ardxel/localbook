@@ -1,5 +1,26 @@
 :root {
+  /* 🎨 BASE COLOR */
   --color-folder: #ffcc00;
   --color-file: #e3e3e3;
   --color-pdf: #e20000;
+
+  /* 📏 SPACE */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  /* 🧱 SIZE */
+  --size-header-height: 66px;
+  --size-logo: 42px;
+
+  /* 🧵 FONT */
+  --font-base: "Inter", sans-serif;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-weight-bold: 700;
+
+  /* 🟣 RADIUS */
+  --radius-md: 12px;
 }
