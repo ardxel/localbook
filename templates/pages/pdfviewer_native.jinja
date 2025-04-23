@@ -1,10 +1,9 @@
-﻿{% extends "base.html.jinja" %}
+﻿{% extends "base.jinja" %}
 {% block head %}
 <script>
-	var PDF_FILE = "{{pdf_file}}"
-	var PDF_WORKER = "{{pdf_worker}}"
-	var PDF_SANDBOX = "{{pdf_sandbox}}"
-	// document.body.setAttribute("tabindex", "0")
+	var PDF_FILE = "{{pdf_file}}";
+	var PDF_WORKER = "{{pdf_worker}}";
+	var PDF_SANDBOX = "{{pdf_sandbox}}";
 </script>
 <link rel="resource" type="application/l10n"
 	href="{{ url_for('static', path='packages/pdfjs/web/locale/locale.json')}}">

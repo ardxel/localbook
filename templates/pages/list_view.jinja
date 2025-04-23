@@ -16,7 +16,7 @@ All Files
 		</h1>
 		<ul class="list-view-entries">
 			{% for pdf_file in pdf_files %}
-			{{ pdf_entry(pdf_file, view = 'card') }}
+			{{ pdf_entry(pdf_file, view = 'card', cover = covers.get(pdf_file.nid)) }}
 			{% endfor %}
 		</ul>
 	</div>
