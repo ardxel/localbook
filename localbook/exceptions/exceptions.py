@@ -9,22 +9,20 @@
 
 from fastapi import HTTPException, status
 
-from localbook.lib.filesystem import file, node
-
 
 class UnsupportedMediaTypeException(HTTPException):
-    def __init__(self, node: node.FSNode) -> None:
+    def __init__(self, detail: str = "") -> None:
         self.status_code = status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
-        self.mime = node.mime if file.is_fsfile(node) else "Unsupported Media Type"
+        self.detail = detail or "Unsupported media type"
 
 
-class NotFountException(HTTPException):
+class NotFoundException(HTTPException):
     def __init__(self, detail: str = "") -> None:
         self.status_code = status.HTTP_404_NOT_FOUND
-        self.detail = detail if detail else "Not Found"
+        self.detail = detail or "Not Found"
 
 
 class BadRequestExpection(HTTPException):
     def __init__(self, detail: str = "") -> None:
         self.status_code = status.HTTP_400_BAD_REQUEST
-        self.detail = detail if detail else "Bad Request"
+        self.detail = detail or "Bad Request"

@@ -16,7 +16,7 @@ from fastapi.templating import Jinja2Templates
 
 from localbook.config import Settings
 from localbook.dependencies import get_fstree, get_jinja2, get_settings
-from localbook.exceptions.exceptions import BadRequestExpection, NotFountException
+from localbook.exceptions.exceptions import BadRequestExpection, NotFoundException
 from localbook.lib.filesystem.dir import FSDir, is_fsdir
 from localbook.lib.filesystem.pdf import PDFFile, is_pdf
 from localbook.lib.filesystem.tree import FSTree
@@ -36,11 +36,13 @@ class LibraryServiceContextBuilder:
     def build_tree_view(self, request: Request, root: FSDir):
         entries = sorted(root.iter_children(), key=lambda n: n.name)
         toggle_view_url = request.url_for("serve_list_view")
+        breadcrumbs = root.relpath and "/" + root.relpath or "/"
         context = {
             "entries": entries,
             "parent_dir": root.parent,
             "view_type": "tree",
             "toggle_view_url": toggle_view_url,
+            "breadcrumbs": breadcrumbs,
         }
         return context
 
@@ -53,7 +55,6 @@ class LibraryServiceContextBuilder:
                 if not cover_file.startswith(os.path.sep):
                     cover_file = "/" + cover_file
                 covers[pdf.nid] = cover_file
-        print(covers)
         toggle_view_url = request.url_for("serve_tree_view", path="")
         context = {
             "pdf_files": pdf_files,
@@ -72,22 +73,23 @@ class LibraryService:
         settings: Optional[Settings] = None,
         fstree: Optional[FSTree] = None,
         jinja2: Optional[Jinja2Templates] = None,
-        tmpl_map: Optional[TemplateMap] = None,
+        tmplmap: Optional[TemplateMap] = None,
     ) -> None:
         self.logger = getLogger("localbook")
         self.fstree = fstree or get_fstree()
         self.tmpl = jinja2 or get_jinja2()
         self.settings = settings or get_settings()
-        self.tmplmap = tmpl_map or TemplateMap()
+        self.tmplmap = tmplmap or TemplateMap()
         self.pdf_cover_service = pdf_cover_service or BookCoverService()
         self.ctx_builder = ctx_builder or LibraryServiceContextBuilder()
 
     async def serve_tree_view(self, request: Request, path=""):
-        dir = self.fstree.get_node(path)
-        if dir is None and path == "":
+        if path == "":  # default value
             dir = self.fstree.get_root_node()
+        else:
+            dir = self.fstree.get_node(path)
         if dir is None:
-            raise NotFountException(f"Error: directory '{path}' not found")
+            raise NotFoundException(f"Error: directory '{path}' not found")
         if not is_fsdir(dir):
             raise BadRequestExpection(f"Error: {path} is not a directory")
 

@@ -16,7 +16,7 @@ from fastapi.templating import Jinja2Templates
 
 from localbook.dependencies import get_fstree, get_jinja2
 from localbook.exceptions.exceptions import (
-    NotFountException,
+    NotFoundException,
     UnsupportedMediaTypeException,
 )
 from localbook.lib.filesystem.pdf import is_pdf
@@ -40,7 +40,7 @@ class BookService:
         """use pdfjs library to render pdf documents"""
         pdf_node = self.fstree.get_node(path)
         if not pdf_node:
-            raise NotFountException(f"Error: PDF file '{path}' not found")
+            raise NotFoundException(f"Error: PDF file '{path}' not found")
         elif not is_pdf(pdf_node):
             # TODO: implement better error handling in this block
             raise UnsupportedMediaTypeException(pdf_node)
