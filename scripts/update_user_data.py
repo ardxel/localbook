@@ -2,9 +2,10 @@
 # @Project: LocalBook
 # @Author: Vasily Bobnev (@ardxel)
 # @License: MIT License
-# @Date: 18.03.2025 12:20
+# @Date: 19.04.2025 16:27
 # @Repository: https://github.com/ardxel/localbook.git
 # ================================================================
+
 
 # /// script
 # requires-python = ">=3.13"
