@@ -12,6 +12,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: install dependencies
+        run: sudo apt install poppler-utils
+
       - name: Install uv
         uses: astral-sh/setup-uv@v5
 
