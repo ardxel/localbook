@@ -1,15 +1,14 @@
 .entry-row {
-  border: 1px solid black;
-  height: 72px;
+  height: var(--size-entry-row-height);
   width: 100%;
-  padding: 8px 16px;
+  padding: var(--space-sm) var(--space-md);
   position: relative;
 }
 
 .entry-row-anchor {
   display: flex;
   align-items: center;
-  column-gap: 16px;
+  column-gap: var(--space-md);
   height: 100%;
   width: 100%;
   text-decoration: none;
@@ -20,17 +19,17 @@
 }
 
 .entry-row-icon-box {
-  width: 56px;
-  height: 56px;
-  border-radius: 8px;
+  width: var(--size-entry-row-icon);
+  height: var(--size-entry-row-icon);
+  border-radius: var(--space-sm);
   overflow: hidden;
 }
 
 .entry-row-icon-box svg {
   width: 100%;
   height: 100%;
-  stroke: var(--text-primary);
-  stroke-width: 20px;
+  stroke: var(--color-text-primary);
+  stroke-width: var(--size-icon-sm);
   stroke-linejoin: round;
   paint-order: stroke;
 }
@@ -50,16 +49,17 @@
 .entry-row-text {
   display: flex;
   flex-direction: column;
+  row-gap: 5px;
 }
 
 .entry-row-text-name {
-  color: var(--text-primary);
+  color: var(--color-text-primary);
   margin: 0px;
   font-size: 16px;
 }
 
 .entry-row-text-desc {
-  color: var(--text-secondary);
+  color: var(--color-text-secondary);
   margin: 0px;
   font-size: 14px;
 }

@@ -34,6 +34,8 @@ header {
 main {
   flex-grow: 1;
   padding: var(--space-md);
+  margin: 0 auto;
+  max-width: 1280px;
   width: 100%;
   height: 100%;
   background-color: var(--color-background);
@@ -101,7 +103,7 @@ footer {
 }
 
 .header-menu-item svg {
-  fill: var(--text-secondary);
+  fill: var(--color-text-secondary);
 }
 
 .text-field {

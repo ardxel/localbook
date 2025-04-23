@@ -1,11 +1,11 @@
 .entry-card {
   list-style: none;
-  border-radius: 8px;
+  border-radius: var(--space-sm);
   cursor: pointer;
   border: 1px solid black;
   overflow: hidden;
-  color: var(--text-primary);
-  background-color: var(--surface);
+  color: var(--color-text-primary);
+  background-color: var(--color-surface);
 }
 
 .entry-card-link {
@@ -28,11 +28,11 @@
 }
 
 .entry-card-text {
-  padding: 6px;
+  padding: var(--space-sm);
   overflow: hidden;
 }
 .entry-card-text .entry-card-name {
   font-weight: 500;
-  font-size: 16px;
+  font-size: var(--font-size-base);
   margin: 0px;
 }
