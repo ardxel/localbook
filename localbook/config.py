@@ -21,6 +21,9 @@ from pydantic_settings import (
 
 from localbook.lib.decorators import singleton
 
+CONFIG_TOML = "config.toml"
+ENV_PREFIX = "APP_"
+BUILD_DIR = "build"
 DATA_LOCATION = "build/books"
 
 
@@ -60,11 +63,17 @@ class FSSettings(BaseModel):
         except ValueError as e:
             raise e
 
+        build_dir = os.path.relpath(BUILD_DIR)
+        if not os.path.exists(build_dir):
+            os.makedirs(build_dir)
         books_loc = os.path.relpath(DATA_LOCATION)
 
         # clear existed data
         if os.path.exists(books_loc):
-            shutil.rmtree(books_loc)
+            if os.path.islink(books_loc):
+                os.remove(books_loc)
+            else:
+                shutil.rmtree(books_loc)
 
         if os.path.islink(self.user_data_location):
             # read symlink
@@ -82,7 +91,11 @@ class FSSettings(BaseModel):
 
 @singleton
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(toml_file="config.toml")
+    model_config = SettingsConfigDict(
+        toml_file=CONFIG_TOML,
+        env_prefix=ENV_PREFIX,
+        env_nested_delimiter="__",
+    )
     server: ServerSettings
     filesystem: FSSettings
 
@@ -95,4 +108,9 @@ class Settings(BaseSettings):
         dotenv_settings: PydanticBaseSettingsSource,
         file_secret_settings: PydanticBaseSettingsSource,
     ) -> Tuple[PydanticBaseSettingsSource, ...]:
-        return (TomlConfigSettingsSource(settings_cls),)
+        env_keys = os.environ.keys()
+        has_env_keys = any(k.startswith(ENV_PREFIX) for k in env_keys)
+        if has_env_keys:
+            return (env_settings,)
+        else:
+            return (TomlConfigSettingsSource(settings_cls),)
