@@ -77,8 +77,8 @@ class Deps:
         appLogger.setup()
         self.__tmpl = Jinja2Templates(directory="templates")
         self.__fstree = FSTree(
-            root=self.__settings.fs.user_data_location,
-            max_depth=self.__settings.fs.dfs_max_depth,
+            root=self.__settings.filesystem.user_data_location,
+            max_depth=self.__settings.filesystem.dfs_max_depth,
             follow_symlink=True,
             normalize=True,
         )
@@ -93,7 +93,7 @@ class Deps:
 
     @property
     def fs_settings(self) -> FSSettings:
-        return self.__settings.fs
+        return self.__settings.filesystem
 
     @property
     def jinja2(self) -> Jinja2Templates:

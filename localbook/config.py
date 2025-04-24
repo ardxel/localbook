@@ -59,7 +59,7 @@ class FSSettings(BaseModel):
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(toml_file="config.toml")
     server: ServerSettings
-    fs: FSSettings
+    filesystem: FSSettings
 
     @classmethod
     def settings_customise_sources(

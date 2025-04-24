@@ -4,7 +4,7 @@ host = 'localhost'
 debug = true
 mode="development"
 
-[fs]
+[filesystem]
 user_data_location ="/home/ardxel/books"
 extend_data = false
 dfs_max_depth = 999
