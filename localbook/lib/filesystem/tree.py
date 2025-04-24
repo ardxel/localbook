@@ -134,16 +134,6 @@ class _FSTreeBuilder:
         """return new list without dotfiles"""
         return [x for x in entries if not os.path.basename(x).startswith(".")]
 
-    # def _normalize_tree(self) -> None:
-    #     if self.root_node is not None:
-    #         need_to_check_depth = isinstance(self.__rpath, FSDir)
-    #         normalizer = _FSTreeNormalizer(
-    #             self.root_node,
-    #             max_depth=self.max_depth if need_to_check_depth else None,
-    #             remove_empty_dirs=True,
-    #         )
-    #         normalizer.exec()
-
     def _build_tree(self) -> FSDir:
         # no  need to build if `root` is already FSDir
         if self.__rpath is None:
