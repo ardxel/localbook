@@ -17,14 +17,12 @@ from typing import Any, Callable, Optional, Self
 from pdf2image import convert_from_path
 from PIL.Image import Image, Resampling
 
+from localbook.config import COVER_DIR, COVER_METADATA_FILE
 from localbook.dependencies import get_fstree
 from localbook.lib.filesystem.node import NID
 from localbook.lib.filesystem.pdf import PDFFile
 from localbook.lib.filesystem.tree import FSTree
 
-COVER_FORMAT = "JPEG"
-COVER_DIR = "build/images/pdf-covers"
-COVER_METADATA_FILE = "build/metadata/pdf_covers.json"
 DEFAULT_IMAGE_SETTINGS = [
     {
         "device": "desktop",

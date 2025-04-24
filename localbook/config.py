@@ -21,10 +21,15 @@ from pydantic_settings import (
 
 from localbook.lib.decorators import singleton
 
+BUILD_DIR = "build"
 CONFIG_TOML = "config.toml"
 ENV_PREFIX = "APP_"
-BUILD_DIR = "build"
 DATA_LOCATION = "build/books"
+
+# pdf covers
+COVER_FORMAT = "JPEG"
+COVER_DIR = "build/images/pdf-covers"
+COVER_METADATA_FILE = "build/metadata/pdf_covers.json"
 
 
 class ServerSettings(BaseModel):
@@ -39,7 +44,7 @@ class FSSettings(BaseModel):
     extend_data: bool = False  # force copy user data to static/books
     dfs_max_depth: int = 3
 
-    def _validate_user_loc(self, loc: str):
+    def _check_user_loc(self, loc: str):
         if not os.path.exists(loc):
             raise ValueError(
                 f"Error: user data location is not a directory.\nGot user path: {loc}"
@@ -59,7 +64,7 @@ class FSSettings(BaseModel):
     def model_post_init(self, __context):
         try:
             # validate config.filesystem.user_data_location
-            self._validate_user_loc(self.user_data_location)
+            self._check_user_loc(self.user_data_location)
         except ValueError as e:
             raise e
 
