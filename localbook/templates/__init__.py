@@ -6,10 +6,12 @@
 # @Repository: https://github.com/ardxel/localbook.git
 # ================================================================
 
+from dataclasses import dataclass
 
+
+@dataclass(frozen=True)
 class TemplateMap:
-    def __init__(self) -> None:
-        self.base_error = "pages/base_error.jinja"
-        self.serve_list_view = "pages/list_view.jinja"
-        self.serve_tree_view = "pages/tree_view.jinja"
-        self.pdfviewer = "pages/pdfviewer_native.jinja"
+    base_error: str = "pages/base_error.jinja"
+    serve_list_view: str = "pages/list_view.jinja"
+    serve_tree_view: str = "pages/tree_view.jinja"
+    book_viewer_mozilla: str = "pages/book_viewer_mozilla.jinja"

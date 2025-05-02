@@ -14,14 +14,17 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any, Callable, Optional, Self
 
+from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from pdf2image import convert_from_path
 from PIL.Image import Image, Resampling
 
-from localbook.config import COVER_DIR, COVER_METADATA_FILE
+from localbook.config import CACHE_BOOK_COVER_DIR, CACHE_COVER_METADATA_FILE
 from localbook.dependencies import get_fstree
 from localbook.lib.filesystem.node import NID
 from localbook.lib.filesystem.pdf import PDFFile
 from localbook.lib.filesystem.tree import FSTree
+from localbook.lib.static import StaticComponent
 
 DEFAULT_IMAGE_SETTINGS = [
     {
@@ -130,7 +133,7 @@ class BookCoverMetadata:
         self,
         metadata_file: Optional[str] = None,
     ) -> None:
-        self.data_fp = metadata_file or COVER_METADATA_FILE
+        self.metadata_file = metadata_file or CACHE_COVER_METADATA_FILE
 
     def save(self, data: list[_BookCoverInfo]) -> None:
         m = _BookCoverMetadataDigest(
@@ -139,22 +142,22 @@ class BookCoverMetadata:
             count=len(data),
         )
 
-        if not os.path.exists(os.path.dirname(self.data_fp)):
-            os.makedirs(os.path.dirname(self.data_fp), exist_ok=True)
-        with open(self.data_fp, "w") as f:
+        if not os.path.exists(os.path.dirname(self.metadata_file)):
+            os.makedirs(os.path.dirname(self.metadata_file), exist_ok=True)
+        with open(self.metadata_file, "w") as f:
             json.dump(m.to_dict(), f, indent=2)
 
     def read(self) -> _BookCoverMetadataDigest:
-        if not os.path.exists(self.data_fp):
+        if not os.path.exists(self.metadata_file):
             raise ValueError("metadata file is not exists")
-        with open(self.data_fp, "r") as f:
+        with open(self.metadata_file, "r") as f:
             d = json.load(f)
             m = _BookCoverMetadataDigest.from_dict(**d)
             return m
 
     def clear(self) -> None:
-        if os.path.exists(self.data_fp):
-            os.remove(self.data_fp)
+        if os.path.exists(self.metadata_file):
+            os.remove(self.metadata_file)
 
 
 class BookCoverGenerator:
@@ -174,7 +177,7 @@ class BookCoverGenerator:
         **kwargs,
     ) -> None:
         self.logger = logging.getLogger("localbook")
-        self.cover_dir = cover_dir or COVER_DIR
+        self.data_dir = cover_dir or CACHE_BOOK_COVER_DIR
         image_settings = image_settings or DEFAULT_IMAGE_SETTINGS
         self.image_settings = [_ImageSettings.from_dict(i) for i in image_settings]
         self.fstree = fstree or get_fstree()
@@ -189,7 +192,7 @@ class BookCoverGenerator:
 
         try:
             artefact = self.metadata.read()
-        except Exception as e:
+        except Exception:
             artefact = None
         pdf_files = self.fstree.pdf_list()
 
@@ -212,7 +215,7 @@ class BookCoverGenerator:
             # remaining covers that haven't been paired with existing pdf files
             for pf in orphaned:
                 shutil.rmtree(
-                    path=os.path.join(self.cover_dir, cached[pf].pdf_nid),
+                    path=os.path.join(self.data_dir, cached[pf].pdf_nid),
                     ignore_errors=False,
                 )
 
@@ -220,7 +223,7 @@ class BookCoverGenerator:
             valid += extra_covers
             self.metadata.save(valid)
         else:
-            os.makedirs(self.cover_dir, exist_ok=True)
+            os.makedirs(self.data_dir, exist_ok=True)
             covers = [self._generate_cover(pf) for pf in pdf_files]
             self.metadata.save(covers)
 
@@ -251,7 +254,7 @@ class BookCoverGenerator:
                 resample=Resampling.LANCZOS,
             )
 
-            nid_dir = os.path.join(self.cover_dir, str(pf.nid))
+            nid_dir = os.path.join(self.data_dir, str(pf.nid))
             if not os.path.exists(nid_dir):
                 os.makedirs(nid_dir, exist_ok=True)
             # cover file
@@ -265,20 +268,36 @@ class BookCoverGenerator:
         return info
 
     def clear_data(self) -> None:
-        if os.path.exists(self.cover_dir):
-            shutil.rmtree(self.cover_dir)
-        os.makedirs(self.cover_dir, exist_ok=True)
+        if os.path.exists(self.data_dir):
+            shutil.rmtree(self.data_dir)
+        os.makedirs(self.data_dir, exist_ok=True)
         m = BookCoverMetadata()
         m.clear()
 
     def generate(self, cache=True) -> None:
         """will creates covers for every device inside unique `nid` dir"""
+        # FIX: fix this
         try:
             self._generate_unsafe(cache=cache)
         except Exception as e:
             self.logger.warning(f"BookCoverGenerator Error: {e}")
             self.clear_data()
             self._generate_unsafe(cache=False)
+
+
+class BookCoverStaticComponent(StaticComponent):
+    def __init__(self, static_path: str) -> None:
+        super().__init__(static_path)
+
+    def mount(self, app: FastAPI) -> None:
+        generator = BookCoverGenerator()
+        generator.generate(cache=True)
+
+        app.mount(
+            self.static_path,
+            StaticFiles(directory=generator.data_dir, follow_symlink=False),
+            self.static_path,
+        )
 
 
 class BookCoverService:

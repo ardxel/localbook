@@ -7,7 +7,6 @@
 # ================================================================
 
 
-import os
 from logging import getLogger
 from typing import Optional
 
@@ -46,14 +45,18 @@ class LibraryServiceContextBuilder:
         }
         return context
 
+    def normalize_cover_file(self, f: str, nid: str) -> str:
+        relpath = f[f.index(nid) :]
+        prefix = "/build/images/covers"
+        return f"{prefix}/{relpath}"
+
     def build_list_view(self, request: Request):
         pdf_files = sorted(self.fstree.pdf_list(), key=lambda x: x.name)
         covers: dict[str, str] = {}
         for pdf in pdf_files:
             if is_pdf(pdf) and isinstance(pdf, PDFFile):
                 cover_file = self.pdf_cover_service.get_cover(pdf)
-                if not cover_file.startswith(os.path.sep):
-                    cover_file = "/" + cover_file
+                cover_file = self.normalize_cover_file(cover_file, pdf.nid)
                 covers[pdf.nid] = cover_file
         toggle_view_url = request.url_for("serve_tree_view", path="")
         context = {

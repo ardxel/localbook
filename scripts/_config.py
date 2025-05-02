@@ -28,11 +28,11 @@ def git_root() -> str:
         sys.exit(1)
 
 
-def config() -> tuple[dict[str, Any], dict[str, Any]]:
+def get_toml_config() -> tuple[dict[str, Any], dict[str, Any]]:
     """return tuple (system,server) config parsed from \"config.toml\" """
     root = git_root()
     with open(os.path.join(root, "config.toml"), "rb") as bfile:
         cfg = tomllib.load(bfile)
-    cfg_system = cfg["system"]
+    cfg_filesystem = cfg["filesystem"]
     cfg_server = cfg["server"]
-    return cfg_system, cfg_server
+    return cfg_filesystem, cfg_server

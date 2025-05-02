@@ -11,10 +11,20 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
+from localbook.config import (
+    CACHE_BOOKS_LOCATION,
+    UBooksConfigurator,
+    UBookStaticComponent,
+)
 from localbook.controller.library import router as library_router
-from localbook.dependencies import Deps
+from localbook.dependencies import Deps, get_fs_settings, get_settings
 from localbook.exceptions.handlers import ExceptionRender
-from localbook.service.book.cover import BookCoverGenerator
+from localbook.lib.static import StaticComponent
+from localbook.service.book.book import (
+    MozillaViewerPackage,
+    MozillaViewerPackageStaticComponent,
+)
+from localbook.service.book.cover import BookCoverGenerator, BookCoverStaticComponent
 
 
 class LocalBook:
@@ -45,15 +55,17 @@ class LocalBook:
 
     def static(self):
         """STATIC"""
-        pdf_cover_generator = BookCoverGenerator()
-        pdf_cover_generator.generate()
 
-        self.app.mount(
-            "/build/images",
-            StaticFiles(directory="build/images", follow_symlink=False),
-            name="build/images",
-        )
+        components: list[StaticComponent] = [
+            UBookStaticComponent("/build/books"),
+            BookCoverStaticComponent("/build/images/covers"),
+            MozillaViewerPackageStaticComponent("/build/packages/pdfjs"),
+        ]
 
+        for component in components:
+            component.mount(self.app)
+
+        # common files
         self.app.mount(
             "/static",
             StaticFiles(directory="static", follow_symlink=True),
